@@ -1,0 +1,14 @@
+:host {
+  display: flex;
+  justify-content: center;
+}
+
+.error__ilustration {
+  height: 400px;
+  width: 400px;
+}
+
+.error__text {
+  font-size: 2rem;
+  text-align: center;
+}

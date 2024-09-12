@@ -1,0 +1,10 @@
+.mdc-data-table__cell {
+    @media (max-width: 360px) {
+        padding: 0 8px;
+    }
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+    background: rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+}

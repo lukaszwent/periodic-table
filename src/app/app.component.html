@@ -1,1 +1,21 @@
-<mat-slide-toggle>Toggle me!</mat-slide-toggle>
+<pt-layout headerTitle="Periodic table">
+    <ng-container header>
+        <ul class="navigation">
+            @for (navItem of navigationItems; track $index) {
+            <li class="navigation__item">
+                <a [routerLink]="navItem.url">
+                    {{ navItem.name }}
+                </a>
+            </li>
+            }
+        </ul>
+    </ng-container>
+    <ng-container main>
+        <router-outlet></router-outlet>
+    </ng-container>
+    <ng-container footer> Made by Łukasz Went </ng-container>
+</pt-layout>
+
+<div *ngIf="showSpinner()" class="full-screen-spinner">
+    <mat-spinner></mat-spinner>
+</div>
