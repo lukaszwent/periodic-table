@@ -16,6 +16,8 @@
     <ng-container footer> Made by Łukasz Went </ng-container>
 </pt-layout>
 
-<div *ngIf="showSpinner()" class="full-screen-spinner">
+@if (showSpinner()) {
+<div class="full-screen-spinner">
     <mat-spinner></mat-spinner>
 </div>
+}

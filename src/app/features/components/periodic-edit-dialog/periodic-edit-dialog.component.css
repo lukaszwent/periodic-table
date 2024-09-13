@@ -1,0 +1,15 @@
+.mdc-data-table__cell {
+    @media (max-width: 360px) {
+        padding: 0 8px;
+    }
+}
+
+.edit-periodic-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+mat-form-field {
+    width: 100%;
+}
