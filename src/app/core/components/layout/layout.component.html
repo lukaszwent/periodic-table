@@ -1,0 +1,14 @@
+<header class="application-header">
+  <span class="application-header__title">
+    {{ headerTitle }}
+  </span>
+  <ng-content select="[header]"></ng-content>
+</header>
+
+<main class="application-content">
+  <ng-content select="[main]"></ng-content>
+</main>
+
+<footer class="application-footer">
+  <ng-content select="[footer]"></ng-content>
+</footer>
