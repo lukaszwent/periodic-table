@@ -7,7 +7,6 @@ import { FormsModule } from '@angular/forms'
 import { MatInputModule } from '@angular/material/input'
 import { MatButtonModule } from '@angular/material/button'
 import { PeriodicDataService } from '../../../apis/periodic-data.service'
-import { MatProgressSpinner } from '@angular/material/progress-spinner'
 import { finalize, tap } from 'rxjs'
 
 @Component({

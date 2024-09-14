@@ -1,30 +1,35 @@
 .application-header {
-  display: flex;
-  padding: 12px 24px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    display: flex;
+    padding: 12px 24px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .application-header__title {
-  font-size: 1.6rem;
-  font-weight: 500;
+    font-size: 1.6rem;
+    font-weight: 500;
 }
 
 .application-content {
-  padding: 12px 24px;
+    padding: 12px 24px;
+
+    @media (max-width: 360px) {
+        padding-left: 0;
+        padding-right: 0;
+    }
 }
 
 mat-card {
-  margin-bottom: 40px;
+    margin-bottom: 40px;
 }
 
 .application-footer {
-  display: flex;
-  position: fixed;
-  bottom: 0;
-  justify-content: flex-end;
-  align-items: flex-end;
-  width: 100%;
-  padding: 12px 24px;
-  flex: 1;
-  background: white;
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    justify-content: flex-end;
+    align-items: flex-end;
+    width: 100%;
+    padding: 12px 24px;
+    flex: 1;
+    background: white;
 }

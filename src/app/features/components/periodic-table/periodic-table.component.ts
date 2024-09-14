@@ -53,16 +53,20 @@ export class PeriodicTableComponent implements OnInit {
         })
 
         this.queryChange.pipe(debounceTime(2000)).subscribe((search) => {
-            this.filteredPeriodicData.set(
-                this.periodicData().filter(
-                    (val) =>
-                        val.position.toString().toLowerCase().indexOf(search.trim().toLowerCase()) !== -1 ||
-                        val.name.toLowerCase().indexOf(search.trim().toLowerCase()) !== -1 ||
-                        val.symbol.toLowerCase().indexOf(search.trim().toLowerCase()) !== -1 ||
-                        val.weight.toString().toLowerCase().indexOf(search.trim().toLowerCase()) !== -1
-                )
-            )
+            this.filterPeriodicData(search)
         })
+    }
+
+    filterPeriodicData(search: string): void {
+        this.filteredPeriodicData.set(
+            this.periodicData().filter(
+                (val) =>
+                    val.position.toString().toLowerCase().indexOf(search.trim().toLowerCase()) !== -1 ||
+                    val.name.toLowerCase().indexOf(search.trim().toLowerCase()) !== -1 ||
+                    val.symbol.toLowerCase().indexOf(search.trim().toLowerCase()) !== -1 ||
+                    val.weight.toString().toLowerCase().indexOf(search.trim().toLowerCase()) !== -1
+            )
+        )
     }
 
     onQueryChange(value: string): void {
@@ -83,6 +87,7 @@ export class PeriodicTableComponent implements OnInit {
                 this.loadingService.loadingOn()
                 this.periodicDataService.getPeriodicTableData().subscribe((data) => {
                     this.periodicData.set(data)
+                    this.filterPeriodicData(this.query)
                     this.loadingService.loadingOff()
                 })
             }
