@@ -1,0 +1,58 @@
+<h2 mat-dialog-title>Edit {{ data.selectedPeriodic.name }}</h2>
+<mat-dialog-content>
+    <form #myForm="ngForm" class="edit-periodic-form">
+        <mat-form-field>
+            <mat-label>Position</mat-label>
+            <input
+                matInput
+                [(ngModel)]="position"
+                name="position"
+                [disabled]="isLoading()"
+                required
+                #positionInput="ngModel"
+            />
+            @if (positionInput.hasError('required')) {
+            <mat-error> This field is required </mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput [(ngModel)]="name" name="name" [disabled]="isLoading()" required #nameInput="ngModel" />
+            @if (nameInput.hasError('required')) {
+            <mat-error> This field is required </mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Weight</mat-label>
+            <input
+                matInput
+                [(ngModel)]="weight"
+                name="weight"
+                [disabled]="isLoading()"
+                required
+                #weightInput="ngModel"
+            />
+            @if (weightInput.hasError('required')) {
+            <mat-error> This field is required </mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Symbol</mat-label>
+            <input
+                matInput
+                [(ngModel)]="symbol"
+                name="symbol"
+                [disabled]="isLoading()"
+                required
+                #symbolInput="ngModel"
+            />
+            @if (symbolInput.hasError('required')) {
+            <mat-error> This field is required </mat-error>
+            }
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button (click)="close()">Back</button>
+    <button mat-button (click)="update()" [disabled]="myForm.invalid || isLoading()">Update</button>
+</mat-dialog-actions>
