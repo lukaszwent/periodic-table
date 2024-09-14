@@ -1,6 +1,18 @@
 <mat-card>
     <mat-card-content>
-        <table mat-table [dataSource]="periodicData()">
+        <mat-form-field>
+            <mat-label>Search</mat-label>
+            <input
+                type="text"
+                matInput
+                placeholder="Search..."
+                (ngModelChange)="onQueryChange($event)"
+                [ngModel]="query"
+            />
+        </mat-form-field>
+
+        @if (filteredPeriodicData().length) {
+        <table mat-table [dataSource]="filteredPeriodicData()">
             <ng-container matColumnDef="position">
                 <th mat-header-cell *matHeaderCellDef>No.</th>
                 <td mat-cell *matCellDef="let element">{{ element.position }}</td>
@@ -24,5 +36,8 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row (click)="editPeriodic(row)" *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
+        } @else {
+        <pt-no-records-found></pt-no-records-found>
+        }
     </mat-card-content>
 </mat-card>

@@ -1,0 +1,14 @@
+:host {
+    display: flex;
+    justify-content: center;
+}
+
+.no-records__ilustration {
+    height: 400px;
+    width: 400px;
+}
+
+.no-records__text {
+    font-size: 2rem;
+    text-align: center;
+}
