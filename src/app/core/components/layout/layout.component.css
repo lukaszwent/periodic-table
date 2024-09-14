@@ -18,10 +18,6 @@
     }
 }
 
-mat-card {
-    margin-bottom: 40px;
-}
-
 .application-footer {
     display: flex;
     position: fixed;
@@ -31,5 +27,5 @@ mat-card {
     width: 100%;
     padding: 12px 24px;
     flex: 1;
-    background: white;
+    background: #fff;
 }

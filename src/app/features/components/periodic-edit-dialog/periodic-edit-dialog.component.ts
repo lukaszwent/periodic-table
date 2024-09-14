@@ -23,7 +23,10 @@ export class PeriodicEditDialogComponent {
 
     isLoading: WritableSignal<boolean> = signal(false)
 
-    selectedPeriodic: ModelSignal<PeriodicElement> = model({ ...this.data.selectedPeriodic })
+    position: ModelSignal<number> = model(this.data.selectedPeriodic.position)
+    name: ModelSignal<string> = model(this.data.selectedPeriodic.name)
+    weight: ModelSignal<number> = model(this.data.selectedPeriodic.weight)
+    symbol: ModelSignal<string> = model(this.data.selectedPeriodic.symbol)
 
     close(): void {
         this.dialogRef.close()
@@ -32,7 +35,7 @@ export class PeriodicEditDialogComponent {
     update(): void {
         this.isLoading.set(true)
         this.periodicDataService
-            .putSinglePeriodic(this.data.selectedPeriodic.position, this.selectedPeriodic())
+            .putSinglePeriodic(this.data.selectedPeriodic.position, this.prepareData())
             .pipe(
                 tap(() => {
                     this.dialogRef.close(true)
@@ -42,5 +45,14 @@ export class PeriodicEditDialogComponent {
                 })
             )
             .subscribe()
+    }
+
+    prepareData(): PeriodicElement {
+        return {
+            symbol: this.symbol(),
+            position: this.position(),
+            weight: this.weight(),
+            name: this.name(),
+        }
     }
 }
