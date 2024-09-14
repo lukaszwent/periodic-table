@@ -25,7 +25,7 @@ export class PeriodicDataService {
         })
     }
 
-    putSinglePeriodic(editedPosition: number, editedElement: PeriodicElement) {
+    putSinglePeriodic(editedPosition: number, editedElement: PeriodicElement): Observable<PeriodicElement> {
         return new Observable<PeriodicElement>((subscriber) => {
             setTimeout(() => {
                 this.ELEMENT_DATA = [

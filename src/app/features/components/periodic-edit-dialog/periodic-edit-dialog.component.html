@@ -5,7 +5,7 @@
             <mat-label>Position</mat-label>
             <input
                 matInput
-                [(ngModel)]="selectedPeriodic().position"
+                [(ngModel)]="position"
                 name="position"
                 [disabled]="isLoading()"
                 required
@@ -17,14 +17,7 @@
         </mat-form-field>
         <mat-form-field>
             <mat-label>Name</mat-label>
-            <input
-                matInput
-                [(ngModel)]="selectedPeriodic().name"
-                name="name"
-                [disabled]="isLoading()"
-                required
-                #nameInput="ngModel"
-            />
+            <input matInput [(ngModel)]="name" name="name" [disabled]="isLoading()" required #nameInput="ngModel" />
             @if (nameInput.hasError('required')) {
             <mat-error> This field is required </mat-error>
             }
@@ -33,7 +26,7 @@
             <mat-label>Weight</mat-label>
             <input
                 matInput
-                [(ngModel)]="selectedPeriodic().weight"
+                [(ngModel)]="weight"
                 name="weight"
                 [disabled]="isLoading()"
                 required
@@ -47,7 +40,7 @@
             <mat-label>Symbol</mat-label>
             <input
                 matInput
-                [(ngModel)]="selectedPeriodic().symbol"
+                [(ngModel)]="symbol"
                 name="symbol"
                 [disabled]="isLoading()"
                 required
