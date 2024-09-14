@@ -1,6 +1,6 @@
 import { LoadingService } from './../../../shared/services/loading.service'
 import { PeriodicDataService } from './../../../apis/periodic-data.service'
-import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core'
+import { Component, inject, model, ModelSignal, OnInit, signal, WritableSignal } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { PeriodicElement } from '../../../types/periodic/periodic'
 import { MatTableModule } from '@angular/material/table'
@@ -42,7 +42,7 @@ export class PeriodicTableComponent implements OnInit {
 
     displayedColumns = ['position', 'name', 'weight', 'symbol']
 
-    query: string = ''
+    query: ModelSignal<string> = model('')
 
     queryChange: Subject<string> = new Subject<string>()
 
@@ -71,7 +71,7 @@ export class PeriodicTableComponent implements OnInit {
 
     onQueryChange(value: string): void {
         this.queryChange.next(value)
-        this.query = value
+        this.query.set(value)
     }
 
     editPeriodic(periodic: PeriodicElement): void {
@@ -87,7 +87,7 @@ export class PeriodicTableComponent implements OnInit {
                 this.loadingService.loadingOn()
                 this.periodicDataService.getPeriodicTableData().subscribe((data) => {
                     this.periodicData.set(data)
-                    this.filterPeriodicData(this.query)
+                    this.filterPeriodicData(this.query())
                     this.loadingService.loadingOff()
                 })
             }

@@ -7,7 +7,7 @@
                 matInput
                 placeholder="Search..."
                 (ngModelChange)="onQueryChange($event)"
-                [ngModel]="query"
+                [ngModel]="query()"
             />
         </mat-form-field>
 

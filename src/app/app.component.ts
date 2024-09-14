@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router'
 import { LoadingService } from './shared/services/loading.service'
 import { MatProgressSpinner } from '@angular/material/progress-spinner'
 import { CommonModule } from '@angular/common'
-import { NavigationItem } from './types/periodic/navigation'
+import { NavigationItem } from './types/navigation/navigation'
 
 @Component({
     selector: 'app-root',
