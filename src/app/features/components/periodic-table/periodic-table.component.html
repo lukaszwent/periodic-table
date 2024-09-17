@@ -6,13 +6,14 @@
                 type="text"
                 matInput
                 placeholder="Search..."
-                (ngModelChange)="onQueryChange($event)"
-                [ngModel]="query()"
+                (ngModelChange)="query.next($event)"
+                [ngModel]="query | async"
             />
         </mat-form-field>
 
-        @if (filteredPeriodicData().length) {
-        <table mat-table [dataSource]="filteredPeriodicData()">
+        @let data = filteredPeriodicData$ | async;
+        @if (data && data.length) {
+        <table mat-table [dataSource]="data">
             <ng-container matColumnDef="position">
                 <th mat-header-cell *matHeaderCellDef>No.</th>
                 <td mat-cell *matCellDef="let element">{{ element.position }}</td>
