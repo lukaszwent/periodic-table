@@ -1,6 +1,6 @@
 import { LoadingService } from './../../../shared/services/loading.service'
 import { PeriodicDataService } from './../../../apis/periodic-data.service'
-import { Component, inject, model, ModelSignal, OnInit, signal, WritableSignal } from '@angular/core'
+import { Component, inject } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { PeriodicElement } from '../../../types/periodic/periodic'
 import { MatTableModule } from '@angular/material/table'
@@ -9,10 +9,12 @@ import { MatCard, MatCardContent } from '@angular/material/card'
 import { MatDialog } from '@angular/material/dialog'
 import { PeriodicEditDialogComponent } from '../periodic-edit-dialog/periodic-edit-dialog.component'
 import { MatFormFieldModule } from '@angular/material/form-field'
-import { debounceTime, Subject } from 'rxjs'
+import { BehaviorSubject, debounceTime, exhaustMap, tap } from 'rxjs'
 import { MatInputModule } from '@angular/material/input'
 import { FormsModule } from '@angular/forms'
 import { NoRecordsFoundComponent } from '../../../shared/components/no-records-found/no-records-found.component'
+import { rxState } from '@rx-angular/state'
+import { rxActions } from '@rx-angular/state/actions'
 
 @Component({
     selector: 'pt-periodic-table',
@@ -30,66 +32,65 @@ import { NoRecordsFoundComponent } from '../../../shared/components/no-records-f
     templateUrl: './periodic-table.component.html',
     styleUrl: './periodic-table.component.css',
 })
-export class PeriodicTableComponent implements OnInit {
+export class PeriodicTableComponent {
     readonly dialog = inject(MatDialog)
     readonly route = inject(ActivatedRoute)
     readonly periodicDataService = inject(PeriodicDataService)
     readonly loadingService = inject(LoadingService)
 
-    periodicData: WritableSignal<PeriodicElement[]> = signal([])
-
-    filteredPeriodicData: WritableSignal<PeriodicElement[]> = signal([])
-
     displayedColumns = ['position', 'name', 'weight', 'symbol']
 
-    query: ModelSignal<string> = model('')
+    query: BehaviorSubject<string> = new BehaviorSubject('')
 
-    queryChange: Subject<string> = new Subject<string>()
+    private actions = rxActions<{ refresh: void }>()
 
-    ngOnInit(): void {
-        this.route.snapshot.data['periodicData'].subscribe((data: PeriodicElement[]) => {
-            this.periodicData.set(data)
-            this.filteredPeriodicData.set(data)
-        })
+    private state = rxState<{
+        periodicData: PeriodicElement[]
+        query: string
+    }>(({ set, connect }) => {
+        set({ periodicData: [], query: '' })
 
-        this.queryChange.pipe(debounceTime(2000)).subscribe((search) => {
-            this.filterPeriodicData(search)
-        })
-    }
+        connect('periodicData', this.route.snapshot.data['periodicData'])
+        connect('query', this.query.pipe(debounceTime(2000)))
+    })
 
-    filterPeriodicData(search: string): void {
-        this.filteredPeriodicData.set(
-            this.periodicData().filter(
-                (val) =>
-                    val.position.toString().toLowerCase().indexOf(search.trim().toLowerCase()) !== -1 ||
-                    val.name.toLowerCase().indexOf(search.trim().toLowerCase()) !== -1 ||
-                    val.symbol.toLowerCase().indexOf(search.trim().toLowerCase()) !== -1 ||
-                    val.weight.toString().toLowerCase().indexOf(search.trim().toLowerCase()) !== -1
-            )
+    private refreshEffect = this.actions.onRefresh(
+        (refresh$) =>
+            refresh$.pipe(
+                exhaustMap(() => {
+                    this.loadingService.loadingOn()
+                    return this.periodicDataService.getPeriodicTableData().pipe(
+                        tap(() => {
+                            this.loadingService.loadingOff()
+                        })
+                    )
+                })
+            ),
+
+        (periodicData) => this.state.set('periodicData', (state) => periodicData)
+    )
+
+    filteredPeriodicData$ = this.state.select(['periodicData', 'query'], ({ periodicData, query }) => {
+        return periodicData.filter(
+            (val) =>
+                val.position.toString().toLowerCase().indexOf(query.trim().toLowerCase()) !== -1 ||
+                val.name.toLowerCase().indexOf(query.trim().toLowerCase()) !== -1 ||
+                val.symbol.toLowerCase().indexOf(query.trim().toLowerCase()) !== -1 ||
+                val.weight.toString().toLowerCase().indexOf(query.trim().toLowerCase()) !== -1
         )
-    }
-
-    onQueryChange(value: string): void {
-        this.queryChange.next(value)
-        this.query.set(value)
-    }
+    })
 
     editPeriodic(periodic: PeriodicElement): void {
         const dialogRef = this.dialog.open(PeriodicEditDialogComponent, {
             data: {
-                allPeriodics: this.periodicData(),
+                allPeriodics: this.state.get('periodicData'),
                 selectedPeriodic: periodic,
             },
         })
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                this.loadingService.loadingOn()
-                this.periodicDataService.getPeriodicTableData().subscribe((data) => {
-                    this.periodicData.set(data)
-                    this.filterPeriodicData(this.query())
-                    this.loadingService.loadingOff()
-                })
+                this.actions.refresh()
             }
         })
     }

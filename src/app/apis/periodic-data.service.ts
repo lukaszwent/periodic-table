@@ -21,6 +21,7 @@ export class PeriodicDataService {
         return new Observable<PeriodicElement[]>((subscriber) => {
             setTimeout(() => {
                 subscriber.next(this.ELEMENT_DATA)
+                subscriber.complete()
             }, 3000)
         })
     }
@@ -33,6 +34,7 @@ export class PeriodicDataService {
                     editedElement,
                 ].sort((a, b) => a.position - b.position)
                 subscriber.next(editedElement)
+                subscriber.complete()
             }, 1000)
         })
     }
